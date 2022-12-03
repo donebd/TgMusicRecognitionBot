@@ -18,11 +18,19 @@ def get_deafult_message():
 
 def handle_voice(update, context):
     print("Handle voice message")
-    chat_id = update.message.from_user['id']
+    handle_audio_file(update, context, context.bot.get_file(update.message.voice))
 
-    voice_file = context.bot.get_file(update.message.voice.file_id)
-    voice_file_path = voice_file.download(os.path.join(TEMP_DIR, update.message.voice.file_id + ".mp3"))
-    music_json_data = recognize_music_from_file(voice_file_path)
+
+def handle_audio(update, context):
+    print("Handle audio message")
+    handle_audio_file(update, context, context.bot.get_file(update.message.audio))
+
+
+def handle_audio_file(update, context, audio):
+    chat_id = update.message.from_user['id']
+    audio_file = context.bot.get_file(audio.file_id)
+    audio_file_path = audio_file.download(os.path.join(TEMP_DIR, audio.file_id + ".mp3"))
+    music_json_data = recognize_music_from_file(audio_file_path)
     if music_json_data['result'] is None:
         update.message.reply_text("Music not recognized")
         return
@@ -33,7 +41,6 @@ def handle_voice(update, context):
         music_json_data['result']['artist'] + ".jpg"
     )
     context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=music)
-
 
 def get_music_name(music_json_data):
     artist = music_json_data['result']['artist']
