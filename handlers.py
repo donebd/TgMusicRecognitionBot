@@ -2,12 +2,18 @@ import json
 import os
 
 import requests
+from urlextract import URLExtract
 
 from constants import TEMP_DIR, AUDD_IO_API_KEY
 
 
 def handle_message(update, context):
     text = str(update.message.text).lower()
+    urls = URLExtract().find_urls(text)
+    audioFiles = list(filter(lambda url: text.endswith("mp3"), urls))
+    if len(audioFiles) != 0:
+        handle_url(update, context, audioFiles[0])
+        return
     print("Handle text:", text)
     update.message.reply_text(get_default_message())
 
@@ -27,11 +33,21 @@ def handle_audio(update, context):
     handle_audio_file(update, context, context.bot.get_file(update.message.audio))
 
 
+def handle_url(update, context, url):
+    print("Handle url:", url)
+    music_json_data = recognize_music_from_url(url)
+    handle_music_json_data(update, context, music_json_data)
+
+
 def handle_audio_file(update, context, audio):
-    chat_id = update.message.from_user['id']
     audio_file = context.bot.get_file(audio.file_id)
     audio_file_path = audio_file.download(os.path.join(TEMP_DIR, audio.file_id + ".mp3"))
     music_json_data = recognize_music_from_file(audio_file_path)
+    handle_music_json_data(update, context, music_json_data)
+
+
+def handle_music_json_data(update, context, music_json_data):
+    chat_id = update.message.from_user['id']
     if music_json_data['result'] is None:
         update.message.reply_text("Music not recognized")
         return
@@ -69,5 +85,16 @@ def recognize_music_from_file(audio_file_path):
         'file': open(audio_file_path, 'rb'),
     }
     result = requests.post('https://api.audd.io/', data=data, files=files)
+    json_text = json.loads(result.text)
+    return json_text
+
+
+def recognize_music_from_url(url):
+    data = {
+        'api_token': AUDD_IO_API_KEY,
+        'url': url,
+        'return': 'deezer'
+    }
+    result = requests.post('https://api.audd.io/', data=data)
     json_text = json.loads(result.text)
     return json_text
