@@ -7,17 +7,21 @@ from handlers import handle_message, handle_voice, handle_audio
 
 
 def main():
+    print("Bot initializing...")
     updater = Updater(TELEGRAM_API_KEY, use_context=True)
     updater.dispatcher.add_handler(CommandHandler("start", handle_message))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, handle_message))
     updater.dispatcher.add_handler(MessageHandler(Filters.voice, handle_voice))
     updater.dispatcher.add_handler(MessageHandler(Filters.audio, handle_audio))
     updater.start_polling(1)
-    updater.idle()
 
-    temp_dir = os.path.join(os.path.dirname(__file__), TEMP_DIR)
+    temp_dir = os.path.join(os.path.dirname(__file__), '..', TEMP_DIR)
     if not os.path.exists(temp_dir):
         os.mkdir(temp_dir)
+    print("Bot initializing complete!")
+
+    updater.idle()
+
 
 
 main()
