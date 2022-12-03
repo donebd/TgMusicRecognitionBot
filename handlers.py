@@ -51,22 +51,22 @@ def handle_music_json_data(update, context, music_json_data):
     if music_json_data['result'] is None:
         update.message.reply_text("Music not recognized")
         return
-    print(music_json_data)
 
     music = get_music_name(music_json_data)
     image = get_image_by_url(
-        music_json_data['result']['deezer']['contributors'][0]['picture_medium'],
-        music_json_data['result']['artist'] + ".jpg"
+        music_json_data['result']['spotify']['album']['images'][0]['url'],
+        music_json_data['result']['spotify']['album']['name'] + ".jpg"
     )
     apple_music_url = get_apple_music_url(music_json_data)
-    message = music + '\nApple music: ' + apple_music_url
+    spotify_music_url = get_spotify_music_url(music_json_data)
+    message = music + '\nSpotify music: ' + spotify_music_url + '\nApple music: ' + apple_music_url
     context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=message)
 
 
 def get_music_name(music_json_data):
     artist = music_json_data['result']['artist']
     title = music_json_data['result']['title']
-    album = music_json_data['result']['album']
+    album = music_json_data['result']['spotify']['album']['name']
     return artist + " - " + title + "\nAlbum: " + album
 
 
@@ -83,10 +83,14 @@ def get_apple_music_url(music_json_data):
     return music_json_data['result']['apple_music']['url']
 
 
+def get_spotify_music_url(music_json_data):
+    return music_json_data['result']['spotify']['external_urls']['spotify']
+
+
 def recognize_music_from_file(audio_file_path):
     data = {
         'api_token': AUDD_IO_API_KEY,
-        'return': 'deezer,apple_music'
+        'return': 'apple_music,spotify'
     }
     files = {
         'file': open(audio_file_path, 'rb'),
@@ -100,7 +104,7 @@ def recognize_music_from_url(url):
     data = {
         'api_token': AUDD_IO_API_KEY,
         'url': url,
-        'return': 'deezer,apple_music'
+        'return': 'apple_music,spotify'
     }
     result = requests.post('https://api.audd.io/', data=data)
     json_text = json.loads(result.text)
