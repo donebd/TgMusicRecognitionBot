@@ -9,12 +9,13 @@ from constants import TEMP_DIR, AUDD_IO_API_KEY
 def handle_message(update, context):
     text = str(update.message.text).lower()
     print("Handle text:", text)
-    update.message.reply_text(get_deafult_message())
+    update.message.reply_text(get_default_message())
 
 
-def get_deafult_message():
+def get_default_message():
     message = "Send me some audio, and I'll name the song for you"
     return message
+
 
 def handle_voice(update, context):
     print("Handle voice message")
@@ -42,11 +43,13 @@ def handle_audio_file(update, context, audio):
     )
     context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=music)
 
+
 def get_music_name(music_json_data):
     artist = music_json_data['result']['artist']
     title = music_json_data['result']['title']
     album = music_json_data['result']['album']
     return artist + " - " + title + "\nAlbum: " + album
+
 
 def get_image_by_url(url, filename):
     result = requests.get(url)
