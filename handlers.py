@@ -51,13 +51,16 @@ def handle_music_json_data(update, context, music_json_data):
     if music_json_data['result'] is None:
         update.message.reply_text("Music not recognized")
         return
+    print(music_json_data)
 
     music = get_music_name(music_json_data)
     image = get_image_by_url(
         music_json_data['result']['deezer']['contributors'][0]['picture_medium'],
         music_json_data['result']['artist'] + ".jpg"
     )
-    context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=music)
+    apple_music_url = get_apple_music_url(music_json_data)
+    message = music + '\nApple music: ' + apple_music_url
+    context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=message)
 
 
 def get_music_name(music_json_data):
@@ -76,10 +79,14 @@ def get_image_by_url(url, filename):
     return filePath
 
 
+def get_apple_music_url(music_json_data):
+    return music_json_data['result']['apple_music']['url']
+
+
 def recognize_music_from_file(audio_file_path):
     data = {
         'api_token': AUDD_IO_API_KEY,
-        'return': 'deezer'
+        'return': 'deezer,apple_music'
     }
     files = {
         'file': open(audio_file_path, 'rb'),
@@ -93,7 +100,7 @@ def recognize_music_from_url(url):
     data = {
         'api_token': AUDD_IO_API_KEY,
         'url': url,
-        'return': 'deezer'
+        'return': 'deezer,apple_music'
     }
     result = requests.post('https://api.audd.io/', data=data)
     json_text = json.loads(result.text)
