@@ -35,6 +35,23 @@ def handle_voice(update, context):
     context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=music)
 
 
+def handle_audio(update, context):
+    print("Handle audio message")
+    chat_id = update.message.from_user['id']
+    audio_file = context.bot.get_file(update.message.audio.file_id)
+    audio_file_path = audio_file.download(os.path.join(TEMP_DIR, update.message.audio.file_id + ".mp3"))
+    music_json_data = recognize_music_from_file(audio_file_path)
+    if music_json_data['result'] is None:
+        update.message.reply_text("Music not recognized")
+        return
+
+    music = get_music_name(music_json_data)
+    image = get_image_by_url(
+        music_json_data['result']['deezer']['contributors'][0]['picture_medium'],
+        music_json_data['result']['artist'] + ".jpg"
+    )
+    context.bot.sendPhoto(chat_id=chat_id, photo=open(image, 'rb'), caption=music)
+
 def get_music_name(music_json_data):
     artist = music_json_data['result']['artist']
     title = music_json_data['result']['title']
