@@ -6,6 +6,8 @@ _[Software Engineering course](https://github.com/SemenMartynov/Software-Enginee
 
 Bot based on [music recognition API](https://docs.audd.io/)
 
+**_Actual version:_** 1.0
+
 ## Bot functionality
 
 Bot can recognize music from your voice message:
