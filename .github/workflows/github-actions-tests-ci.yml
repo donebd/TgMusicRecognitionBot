@@ -2,9 +2,9 @@ name: Unit tests
 run-name: ${{ github.actor }} is testing our code
 on:
   push:
-    branches: [ "master", "develop" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "master", "develop" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   Unit-tests:
