@@ -4,7 +4,7 @@ import os
 import requests
 from urlextract import URLExtract
 
-from constants import TEMP_DIR, AUDD_IO_API_KEY
+from .constants import TEMP_DIR, AUDD_IO_API_KEY
 
 
 def handle_message(update, context):
