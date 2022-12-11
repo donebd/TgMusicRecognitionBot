@@ -1,4 +1,10 @@
 # Telegram bot for music recognition
+[![Unit tests](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml/badge.svg?branch=develop)](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml)
+(_main_)
+
+[![Unit tests](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml/badge.svg?branch=develop)](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml)
+(_develop_)
+
 
 Simple telegram bot for music recognition within the educational SPBSTU project.
 
