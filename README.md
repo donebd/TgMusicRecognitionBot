@@ -1,5 +1,5 @@
 # Telegram bot for music recognition
-[![Unit tests](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml/badge.svg?branch=develop)](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml)
+[![Unit tests](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml/badge.svg?branch=main)](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml)
 (_main_)
 
 [![Unit tests](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml/badge.svg?branch=develop)](https://github.com/donebd/TgMusicRecognitionBot/actions/workflows/github-actions-tests-ci.yml)
